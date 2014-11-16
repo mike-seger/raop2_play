@@ -4,13 +4,14 @@ TARGET=raop_play
 DESTDIR =
 
 CFLAGS=-Wall
-OBJS := raop_play.o raop_client.o rtsp_client.o aexcl_lib.o base64.o aes.o \
-audio_stream.o wav_stream.o 
+OBJS := raop_play.o raop_client.o rtsp_client.o aexcl_lib.o \
+	base64.o aes.o audio_stream.o wav_stream.o 
 
 all: $(TARGET)
 
 raop_play: $(OBJS)
-	$(CC) -o $@  $^ -lcrypto -lssl -lsamplerate -lid3tag -lpthread
+	$(CC) -o $@  $^ -lcrypto -lssl -lpthread
+#	$(CC) -o $@  $^ -lcrypto -lssl -lsamplerate -lid3tag -lpthread
 
 install:
 	cp raop_play /usr/local/bin

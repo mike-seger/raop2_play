@@ -36,9 +36,9 @@ typedef struct rtspcl_data_t {
     key_data_t *exthds;
     char *session;
     char *transport;
-    __u16 server_port;
-    __u16 control_port;
-    __u16 timing_port;
+    uint16_t server_port;
+    uint16_t control_port;
+    uint16_t timing_port;
     struct in_addr host_addr;
     struct in_addr local_addr;
     
@@ -77,7 +77,7 @@ int rtspcl_close(rtspcl_t *p)
     return 0;
 }
 
-__u16 rtspcl_get_server_port(rtspcl_t *p)
+uint16_t rtspcl_get_server_port(rtspcl_t *p)
 {
     rtspcl_data_t *rtspcld;
     
@@ -86,7 +86,7 @@ __u16 rtspcl_get_server_port(rtspcl_t *p)
     return rtspcld->server_port;
 }
 
-__u16 rtspcl_get_timing_port(rtspcl_t *p)
+uint16_t rtspcl_get_timing_port(rtspcl_t *p)
 {
     rtspcl_data_t *rtspcld;
     
@@ -95,7 +95,7 @@ __u16 rtspcl_get_timing_port(rtspcl_t *p)
     return rtspcld->timing_port;
 }
 
-__u16 rtspcl_get_control_port(rtspcl_t *p)
+uint16_t rtspcl_get_control_port(rtspcl_t *p)
 {
     rtspcl_data_t *rtspcld;
     
@@ -177,9 +177,9 @@ int rtspcl_remove_all_exthds(rtspcl_t *p)
     return 0;
 }
 
-int rtspcl_connect(rtspcl_t *p, char *host, __u16 destport, char *sid)
+int rtspcl_connect(rtspcl_t *p, char *host, uint16_t destport, char *sid)
 {
-    __u16 myport=0;
+    uint16_t myport=0;
     struct sockaddr_in name;
     socklen_t namelen=sizeof(name);
     rtspcl_data_t *rtspcld;
@@ -240,8 +240,8 @@ int rtspcl_setup(rtspcl_t *p, key_data_t **kd)
 
     if(!p) return -1;
     rtspcld=(rtspcl_data_t *)p;
-    hds[0].key=(__u8*)"Transport";
-    hds[0].data=(__u8*)"RTP/AVP/UDP;unicast;interleaved=0-1;mode=record;control_port=6001;timing_port=6002";
+    hds[0].key=(uint8_t*)"Transport";
+    hds[0].data=(uint8_t*)"RTP/AVP/UDP;unicast;interleaved=0-1;mode=record;control_port=6001;timing_port=6002";
     hds[1].key=NULL;
     if(exec_request(rtspcld, "SETUP", NULL, NULL, 0, 1, hds, &rkd, NULL)) return -1;
     if(!(temp=kd_lookup(rkd, "Session"))){
@@ -310,10 +310,10 @@ int rtspcl_record(rtspcl_t *p)
         return -1;
     }
     gettimeofday(&now,NULL);
-    hds[0].key=(__u8*)"Range";
-    hds[0].data=(__u8*)"npt=0-";
-    hds[1].key=(__u8*)"RTP-Info";
-    hds[1].data=(__u8*)"seq=0;rtptime=0";
+    hds[0].key=(uint8_t*)"Range";
+    hds[0].data=(uint8_t*)"npt=0-";
+    hds[1].key=(uint8_t*)"RTP-Info";
+    hds[1].data=(uint8_t*)"seq=0;rtptime=0";
     hds[2].key=NULL;
     return exec_request(rtspcld,"RECORD",NULL,NULL,0,1,hds,&rtspcld->kd, NULL);
 }    
@@ -338,8 +338,8 @@ int rtspcl_set_daap(rtspcl_t *p, char *para, unsigned long timestamp, int count)
     
     sprintf(rtptime, "rtptime=%ld",timestamp);
     
-    hds[0].key=(__u8*)"RTP-Info";
-    hds[0].data=(__u8*)rtptime;
+    hds[0].key=(uint8_t*)"RTP-Info";
+    hds[0].data=(uint8_t*)rtptime;
     hds[1].key=NULL;
     
     return exec_request(rtspcld, "SET_PARAMETER", "application/x-dmap-tagged", para, count, 2, hds, &rtspcld->kd, NULL);
@@ -380,8 +380,8 @@ int rtspcl_flush(rtspcl_t *p)
     
     if(!p) return -1;
     rtspcld=(rtspcl_data_t *)p;
-    hds[0].key=(__u8*)"RTP-Info";
-    hds[0].data=(__u8*)"seq=0;rtptime=0";
+    hds[0].key=(uint8_t*)"RTP-Info";
+    hds[0].data=(uint8_t*)"seq=0;rtptime=0";
     hds[1].key=NULL;
     return exec_request(rtspcld, "FLUSH", NULL, NULL, 0, 1, hds, &rtspcld->kd, NULL);
 }
@@ -485,7 +485,7 @@ static int exec_request(rtspcl_data_t *rtspcld, char *cmd, char *content_type,
         DBGMSG("----> %s : write %s\n",__func__, req);
         if ( rval != strlen(req) )
         {
-           ERRMSG("couldn't write request (%d!=%d)\n",rval,strlen(req));
+           ERRMSG("couldn't write request (%d!=%d)\n",(int)rval,(int)strlen(req));
         }
     }
     else

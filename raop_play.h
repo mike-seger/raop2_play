@@ -1,4 +1,5 @@
 #include "audio_stream.h"
+#include "raop_client.h"
 
 #ifndef __RAOP_PLAY_H_
 #define __RAOP_PLAY_H_

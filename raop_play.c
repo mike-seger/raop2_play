@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 	int ret;
 	int volume=100;
 	int encrypt=1;
-	__u8 *buf;
+	uint8_t *buf;
 	int iact=0;
 	struct sigaction act;
 
