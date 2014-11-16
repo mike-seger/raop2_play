@@ -1,9 +1,10 @@
 raop_play playground
 
 * to compile it :
-
 make clean
+
 make 
+
 make install
 
 * to use it :
